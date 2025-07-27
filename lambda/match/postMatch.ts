@@ -27,11 +27,12 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
       };
     }
 
+    const now = Date.now(); // timestamp in ms
     const item = {
       id: uuidv4(),
       user_id: username,
       title,
-      date: Math.floor(Date.now() / 1000), // Timestamp en secondes
+      timestamp: now, // For sorting, filtering, etc.
     };
 
     await dynamoDB.put({
