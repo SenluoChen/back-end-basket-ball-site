@@ -14,16 +14,16 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     }
 
     const body = JSON.parse(event.body || '{}');
-    const { timestamp, title, shots, turnovers, assists, rebounds, points } = body;
+    const { timestamp, shots, turnovers, assists, rebounds, points, phase } = body;
 
-    if (!timestamp || !title) {
-      return badRequest('Missing required fields: timestamp or title');
+    if (!timestamp || !phase) {
+      return badRequest('Missing required fields: timestamp or phase');
     }
 
     const prompt = `
 Tu es un expert en stratégie de basketball.
 
-Voici les données du match "${title}" (certaines données peuvent être partielles) :
+Voici les données du match (certaines données peuvent être partielles) :
 
 - Tirs (shots) : liste de tirs avec leurs coordonnées (x, y) et s’ils sont réussis ou ratés :
 ${JSON.stringify(shots ?? [], null, 2)}
@@ -80,7 +80,7 @@ Consignes importantes :
 
     const item = {
       "user_id#timestamp": `${userId}#${timestamp}`,
-      title,
+      phase,
       timestamp,
       shots,
       turnovers,

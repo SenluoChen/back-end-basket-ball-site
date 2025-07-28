@@ -8,15 +8,14 @@ import { UserApiStack } from "../stack/UserApiStack";
 import { AuthStack } from "../stack/AuthStack";
 import { UserMatchApiStack } from "../stack/UserApiStack/UserMatchApiStack";
 
-
-dotenv.config({path: ".env." + process.env.NODE_ENV || "dev"});
+dotenv.config({path: ".env"});
 
 const app = new cdk.App();
 
 const deployEnv =  process.env.NODE_ENV || "dev";
 const appName = "basket-strategy-back";
 
-const chatgpt_api_key = process.env.CHATGPT_API_KEY;
+const chatgpt_api_key = process.env.CHATGPT_API_KEY ?? 'dev';
 
 const auth = new AuthStack(app, `${deployEnv}-${appName}-AuthStack`, {
     appName: appName,
@@ -33,7 +32,7 @@ const userLambdas = new LambdaUserStack(app, `${deployEnv}-${appName}-LambdaUser
     userPool: auth.userPool,
     dynamoTables: data.dynamoTables,
     buckets: data.buckets,
-    chatgptKey: chatgpt_api_key || 'dev'
+    chatgptKey: chatgpt_api_key
 });
 
 
